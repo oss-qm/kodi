@@ -409,9 +409,11 @@ XVisualInfo* CGLContextEGL::GetVisual()
     m_eglConfig=eglConfig;
 
     XVisualInfo x11_visual_info_template;
-    if (!eglGetConfigAttrib(m_eglDisplay, m_eglConfig, EGL_NATIVE_VISUAL_ID, (EGLint*)&x11_visual_info_template.visualid)) {
+    EGLint visualID;
+    if (!eglGetConfigAttrib(m_eglDisplay, m_eglConfig, EGL_NATIVE_VISUAL_ID, &visualID)) {
       CLog::Log(LOGERROR, "Failed to query native visual id\n");
     }
+    x11_visual_info_template.visualid = visualID;
     int num_visuals;
     return XGetVisualInfo(m_dpy,
                         VisualIDMask,
