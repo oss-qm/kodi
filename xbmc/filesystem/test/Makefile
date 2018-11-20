@@ -4,7 +4,8 @@ SRCS= \
   TestFileFactory.cpp \
   TestNfsFile.cpp \
   TestRarFile.cpp \
-  TestZipFile.cpp
+  TestZipFile.cpp \
+  TestZipManager.cpp
 
 LIB=filesystemTest.a
 
