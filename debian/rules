@@ -1,0 +1,182 @@
+#!/usr/bin/make -f
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+# Avoid custom build rule silencing
+export V=1
+
+# bindnow breaks wrappers used in with libdvdread
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all,-bindnow
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+# Use package's version in Kodi
+VERSION := $(shell dpkg-parsechangelog -S Version)
+UPSTREAM_VERSION := $(shell dpkg-parsechangelog -S Version| sed 's/[0-9]*://;s/-[^-]*$$//')
+
+GL_CONFIG_OPTIONS = --enable-gl --disable-gles --enable-vdpau
+ARCH_SPECIFIC_LIB_RECOMMENDS_ADD = -lvdpau
+
+# Disable debugging by default
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+DEBUG_CONFIG_OPTIONS += --enable-debug
+else
+DEBUG_CONFIG_OPTIONS += --disable-debug
+endif
+
+# Enable gles for armel, armhf and arm64
+# Also disable VDPAU and VAAPI there since they break the build with gles
+ifneq (,$(filter armel armhf arm64,$(DEB_HOST_ARCH)))
+GL_CONFIG_OPTIONS = --disable-gl --enable-gles --disable-vdpau --disable-vaapi
+ARCH_SPECIFIC_LIB_RECOMMENDS_ADD =
+else
+# Enable OpenGL but no VDPAU or VAAPI for MIPS
+ifneq (,$(filter mips mipsel,$(DEB_HOST_ARCH)))
+GL_CONFIG_OPTIONS = --enable-gl --disable-gles --disable-vdpau --disable-vaapi
+ARCH_SPECIFIC_LIB_RECOMMENDS_ADD =
+endif
+endif
+
+ARCH_SPECIFIC_LIB_RECOMMENDS += $(ARCH_SPECIFIC_LIB_RECOMMENDS_ADD)
+
+# Various environment variables to set
+export DEB_LDFLAGS_MAINT_APPEND = -latomic
+# for embedded libdvd*:
+export DEB_CPPFLAGS_MAINT_APPEND = -D_XBMC
+
+# List of options to pass to _any_ configure.
+CORE_CONFIG_OPTIONS ?= --host=$(DEB_HOST_GNU_TYPE) \
+  --disable-maintainer-mode \
+  --disable-dependency-tracking \
+  --disable-silent-rules \
+
+# List of options to pass to configure of Kodi. Can be overridden.
+# Extra options can simply be passed using KODI_CONFIG_EXTRA_OPTIONS env
+# variable.
+KODI_CONFIG_OPTIONS ?= $(CORE_CONFIG_OPTIONS) \
+  $(GL_CONFIG_OPTIONS) \
+  --disable-openmax \
+  --disable-tegra \
+  $(DEBUG_CONFIG_OPTIONS) \
+  --disable-profiling \
+  --enable-alsa \
+  --enable-pulse \
+  --disable-dbus \
+  --disable-mid \
+  --enable-avahi \
+  --enable-webserver \
+  --enable-optical-drive \
+  --enable-texturepacker \
+  --enable-libcec \
+  --disable-airtunes \
+  --with-ffmpeg=shared \
+  --disable-non-free \
+  --enable-gtest \
+  --disable-mysql \
+  --with-lirc-device=/var/run/lirc/lircd \
+  $(ARCH_SPECIFIC_OPTIONS) \
+  $(KODI_CONFIG_EXTRA_OPTIONS)
+
+# Used to show what config options are enabled
+show-kodi-config-options:
+	$(info $(KODI_CONFIG_OPTIONS))
+
+%:
+	rm -f debian/autoreconf.before debian/autoreconf.after
+	dh $@ --with python2 --with autoreconf
+
+override_dh_autoreconf:
+	dh_autoreconf --as-needed -- ./bootstrap
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(KODI_CONFIG_OPTIONS)
+
+override_dh_clean:
+	dh_clean libtool xbmc/config.h xbmc/stamp-h1
+	find . -name config.status -o -name config.cache -o -name config.log \
+		-exec rm -f "{}" \;
+	rm -f debian/dh-addon/*.1
+
+# fall back to old location of DejaVuSans.ttf if needed
+ifneq ("$(wildcard /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf)","")
+DEJAVUSANS=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+else
+DEJAVUSANS=/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf
+endif
+
+debian/dh-addon/dh_kodiaddon_depends.1:	debian/dh-addon/dh_kodiaddon_depends
+	pod2man --section=1 --utf8 $< $@
+
+override_dh_auto_build:	debian/dh-addon/dh_kodiaddon_depends.1
+	dh_auto_build
+
+override_dh_auto_test-arch:
+	dh_auto_test -a
+
+# No tests for indep build.
+override_dh_auto_test-indep:
+
+override_dh_auto_install:
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	install -m 755 $(CURDIR)/tools/depends/native/TexturePacker/bin/TexturePacker \
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/kodi/
+	$(MAKE) eventclients DESTDIR=$(CURDIR)/debian/tmp \
+		WII_EXTRA_OPTS=-DCWIID_OLD
+
+override_dh_install-indep:
+	dh_install -i -XLICENCE -XLICENSE \
+		-XLicence.txt -XLicense.txt -XLICENSE.txt \
+		-XNOTICE.txt \
+		-Xjquery-1.8.2.min.js -Xiscroll-min.js
+	rm -rf debian/kodi-data/usr/share/kodi/addons/repository.xbmc.org
+	dh_install -pkodi-repository-kodi \
+		addons/repository.xbmc.org/* usr/share/kodi/addons/repository.xbmc.org
+
+override_dh_install-arch:
+	dh_install -a -XLICENCE -XLICENSE -XLicence.txt -XLicense.txt \
+		-XLICENSE.txt -XNOTICE.txt
+	# check if all needed headers are included
+	$(CXX) -c debian/headers-check.c -DBUILD_KODI_ADDON \
+	$(shell dpkg-buildflags --get CPPFLAGS) \
+	$(shell dpkg-buildflags --get CXXFLAGS) \
+	-Idebian/kodi-addons-dev/usr/include \
+	-Idebian/kodi-addons-dev/usr/include/kodi \
+	-o /dev/null
+
+override_dh_shlibdeps: debian/tmp/kodi-bin-depends-dummy.so debian/tmp/kodi-bin-recommends-dummy.so
+	dh_shlibdeps -a -O--parallel \
+		-l$(CURDIR)/debian/kodi-bin/usr/lib/*/kodi/system/players/dvdplayer
+	# Need to manually add dependencies for dlopened libs.
+	dpkg-shlibdeps -pdlopenlibs -edebian/tmp/kodi-bin-depends-dummy.so -xlibc6 -O >>debian/kodi-bin.substvars
+	dpkg-shlibdeps -dRecommends -edebian/tmp/kodi-bin-recommends-dummy.so -xlibc6 -O >>debian/kodi-bin.substvars
+
+debian/tmp/kodi-bin-depends-dummy.so:
+	mkdir -p debian/tmp
+	cc -xc -shared -Wl,--no-as-needed -o $@ /dev/null \
+		-lcurl-gnutls
+
+debian/tmp/kodi-bin-recommends-dummy.so:
+	mkdir -p debian/tmp
+	cc -xc -shared -Wl,--no-as-needed -o $@ /dev/null \
+		-lass \
+		-lbluray \
+		-lcec \
+		-lmodplug \
+		-lnfs \
+		-lplist \
+		$(ARCH_SPECIFIC_LIB_RECOMMENDS)
+
+override_dh_strip:
+	dh_strip --ddeb-migration="kodi-dbg (<< 15.1+dfsg1-4~)" || dh_strip
+
+override_dh_gencontrol-arch:
+	debian/dh-addon/dh_kodiaddon_depends
+	dh_gencontrol -a
+
+override_dh_gencontrol-indep:
+	dh_gencontrol -i
+
+# extract customized additional tarballs
+extract-components:
+	tar -xf $(CURDIR)/../kodi_"$(UPSTREAM_VERSION)".orig-webinterface-default.tar.xz
