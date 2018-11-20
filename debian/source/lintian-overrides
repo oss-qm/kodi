@@ -1,0 +1,24 @@
+# License is in License-Reference field (see bug#786450)
+missing-license-paragraph-in-dep5-copyright gpl-2 *
+missing-license-paragraph-in-dep5-copyright gpl-2\+ *
+missing-license-paragraph-in-dep5-copyright gpl-3\+ *
+missing-license-paragraph-in-dep5-copyright lgpl-2\+ *
+missing-license-paragraph-in-dep5-copyright lgpl-2.1\+ *
+missing-license-paragraph-in-dep5-copyright lgpl-3\+ *
+missing-license-paragraph-in-dep5-copyright mpl-1\.1 *
+missing-license-text-in-dep5-copyright GPL-2 *
+missing-license-text-in-dep5-copyright GPL-2\+ *
+missing-license-text-in-dep5-copyright GPL-3\+ *
+missing-license-text-in-dep5-copyright LGPL-2\+ *
+missing-license-text-in-dep5-copyright LGPL-2.1\+ *
+missing-license-text-in-dep5-copyright LGPL-3\+ *
+missing-license-text-in-dep5-copyright MPL-1\.1 *
+
+# false positive: license grant must be included verbatim
+obsolete-url-in-packaging debian/copyright http://code.google.com/p/chromium/issues/detail?id=71403
+
+# This is the source, but it happens to contain long lines
+kodi source: source-is-missing webinterface-default/js/MediaLibrary.js *
+
+# Transitional packages don't need misc-depends
+kodi source: debhelper-but-no-misc-depends xbmc*
