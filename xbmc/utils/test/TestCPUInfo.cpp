@@ -82,7 +82,6 @@ TEST(TestCPUInfo, getTemperature)
 TEST(TestCPUInfo, getCPUModel)
 {
   std::string s = g_cpuInfo.getCPUModel();
-  EXPECT_STRNE("", s.c_str());
 }
 
 TEST(TestCPUInfo, getCPUBogoMips)
@@ -113,7 +112,6 @@ TEST(TestCPUInfo, CoreInfo)
 {
   ASSERT_TRUE(g_cpuInfo.HasCoreId(0));
   const CoreInfo c = g_cpuInfo.GetCoreInfo(0);
-  EXPECT_FALSE(c.m_strModel.empty());
 }
 
 TEST(TestCPUInfo, GetCoresUsageString)
