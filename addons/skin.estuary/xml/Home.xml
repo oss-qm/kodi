@@ -965,6 +965,14 @@
 					<height>36</height>
 					<texture>icons/logo-text.png</texture>
 				</control>
+		                <control type="image">
+			          <left>150</left>
+				  <top>0</top>
+			          <width>250</width>
+				  <height>56</height>
+			          <aspectratio>keep</aspectratio>
+			          <texture>from-debian-logo.png</texture>
+		                </control>
 			</control>
 			<control type="rss">
 				<animation effect="slide" end="0,90" time="300" tween="sine" easing="inout" condition="$EXP[infodialog_active]">conditional</animation>
