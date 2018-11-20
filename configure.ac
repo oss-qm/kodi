@@ -616,7 +616,7 @@ case $host in
      CORE_SYSTEM_NAME=linux
      ARCH="arm"
      use_arch="arm"
-     use_neon=yes
+     use_neon=no
      use_gles=yes
      use_gl=no
      USE_STATIC_FFMPEG=1
