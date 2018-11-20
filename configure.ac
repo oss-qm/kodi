@@ -2156,7 +2156,6 @@ OUTPUT_FILES="Makefile \
     xbmc/cores/VideoPlayer/VideoRenderers/Makefile \
     xbmc/cores/VideoPlayer/VideoRenderers/HwDecRender/Makefile \
     xbmc/cores/VideoPlayer/Makefile \
-    lib/libdvd/Makefile \
     xbmc/cores/DllLoader/Makefile \
     xbmc/cores/DllLoader/exports/Makefile \
     xbmc/cores/VideoPlayer/DVDCodecs/Makefile \

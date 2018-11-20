@@ -11,7 +11,6 @@ EC_DIRS= \
 
 DVDPCODECS_DIRS= \
 	lib \
-	lib/libdvd
 
 VideoPlayer_ARCHIVES=xbmc/cores/VideoPlayer/VideoPlayer.a \
                    xbmc/cores/VideoPlayer/DVDCodecs/DVDCodecs.a \
@@ -351,7 +350,6 @@ libaddon: exports
 	$(MAKE) -C lib/addons/library.xbmc.pvr
 	$(MAKE) -C lib/addons/library.kodi.inputstream
 dvdpcodecs: dllloader
-	$(MAKE) -C lib/libdvd
 
 dvdpextcodecs:
 
