@@ -12,7 +12,7 @@ ifeq (@CROSS_COMPILING@,yes)
 else
   DVDNAV_A = @abs_top_srcdir@/tools/depends/target/libdvdnav/dvdnav-install/lib/libdvdnav.a
   DVDREAD_A = @abs_top_srcdir@/tools/depends/target/libdvdread/dvdread-install/lib/libdvdread.a
-  DVDCSS_A = @abs_top_srcdir@/tools/depends/target/libdvdcss/dvdcss-install/lib/libdvdcss.a
+  DVDCSS_A =
 endif
 
 SYSDIR = @abs_top_srcdir@/system/players/VideoPlayer
@@ -36,7 +36,7 @@ endif
 ifeq ($(ARCH),arm-osx)
   BUILD_DVDCSS = 0
 else
-  BUILD_DVDCSS = 1
+  BUILD_DVDCSS = 0
 endif
 ifeq ($(BUILD_DVDCSS),1)
   SOS += libdvdcss-$(ARCH).so
