@@ -486,7 +486,7 @@ void CVideoPlayerAudio::Process()
         // guess next pts
         m_audioClock += audioframe.duration;
 
-        int ret = m_pAudioCodec->Decode(nullptr, 0, DVD_NOPTS_VALUE, DVD_NOPTS_VALUE);
+        int ret = 0;
         if (ret < 0)
         {
           CLog::Log(LOGERROR, "CVideoPlayerAudio::DecodeFrame - Decode Error. Skipping audio packet (%d)", ret);
