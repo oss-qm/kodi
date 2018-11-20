@@ -2204,7 +2204,6 @@ OUTPUT_FILES="Makefile \
     tools/Linux/kodi-standalone.sh \
     tools/Linux/kodi-xsession.desktop \
     tools/EventClients/Makefile \
-    tools/EventClients/Clients/OSXRemote/Makefile \
     xbmc/peripherals/addons/Makefile \
     xbmc/peripherals/bus/Makefile \
     xbmc/peripherals/devices/Makefile \
