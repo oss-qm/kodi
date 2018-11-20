@@ -34,6 +34,8 @@ extern "C" {
  #define HAVE_CONFIG_H
  #endif
 
+ // pull in Kodi's config h instead of dvdnav's one
+ #include "xbmc/config.h"
  #include "dvdnav/dvdnav_internal.h"
  #include "dvdnav/vm.h"
  #include "dvdnav/dvd_types.h"
