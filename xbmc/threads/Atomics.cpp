@@ -110,6 +110,8 @@ long long cas2(volatile long long* pAddr, long long expectedVal, long long swapV
     defined(__powerpc__) || \
     defined(__arm__) || \
     defined(__aarch64__) || \
+    defined(__s390x__) || \
+    defined(__alpha__) || \
     defined(__SH4__) || \
     defined(__sparc__) || \
     defined(__arc__) || \

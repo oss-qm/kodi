@@ -35,6 +35,8 @@
 #if defined(__ppc__) || \
     defined(__powerpc__) || \
     defined(__mips__) || \
+    defined(__s390x__) || \
+    defined(__alpha__) || \
     defined(__arm__) || \
     defined(__aarch64__) || \
     defined(__SH4__) || \

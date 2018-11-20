@@ -24,6 +24,8 @@
     !defined(__arm__) && \
     !defined(__aarch64__) && \
     !defined(__mips__) && \
+    !defined(__s390x__) && \
+    !defined(__alpha__) && \
     !defined(__SH4__) && \
     !defined(__sparc__) && \
     !defined(__arc__) && \
