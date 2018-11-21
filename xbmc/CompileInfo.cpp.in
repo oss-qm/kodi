@@ -44,5 +44,5 @@ const char* CCompileInfo::GetSuffix()
 
 const char* CCompileInfo::GetSCMID()
 {
-  return "@APP_SCMID@";
+  return "";
 }
