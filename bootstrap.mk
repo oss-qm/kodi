@@ -1,6 +1,5 @@
 BOOTSTRAP_SUBDIRS += configure.ac
 BOOTSTRAP_SUBDIRS += lib/cpluff/configure.ac
-BOOTSTRAP_SUBDIRS += lib/gtest/configure.ac
 
 BOOTSTRAP_TARGETS=$(basename $(BOOTSTRAP_SUBDIRS))
 all: $(BOOTSTRAP_TARGETS)

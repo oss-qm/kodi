@@ -257,7 +257,7 @@ FINAL_TARGETS+=Makefile externals
 
 GTEST_DIR = lib/gtest
 GTEST_INCLUDES = -I$(GTEST_DIR)/include
-GTEST_LIBS = $(GTEST_DIR)/lib/.libs/libgtest.a
+GTEST_LIBS = $(GTEST_DIR)/libgtest.a
 
 CHECK_DIRS = xbmc/addons/test \
              xbmc/filesystem/test \

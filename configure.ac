@@ -2391,18 +2391,11 @@ XB_CONFIG_MODULE([lib/cpluff], [
 ], [0])
 
 XB_CONFIG_MODULE([lib/gtest], [
-  ./configure \
     CC="$CC" \
     CXX="$CXX" \
     CFLAGS="$CFLAGS" \
     CXXFLAGS="$CXXFLAGS" \
-    --prefix="${prefix}" --includedir="${includedir}" --libdir="${libdir}" --datadir="${datadir}" \
-    --host=$host_alias \
-    --build=$build_alias \
-    --target=$target_alias \
-    --disable-shared \
-    --enable-static \
-    --with-pthreads
+    cmake .
 ], [$SKIP_CONFIG_GTEST])
 
 AC_OUTPUT
