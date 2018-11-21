@@ -7,9 +7,9 @@ if(NOT WIN32)
       list(APPEND _handlevars DVDCSS_LIBRARY)
     endif()
 
-    if(PKG_CONFIG_FOUND)
+#    if(PKG_CONFIG_FOUND)
       pkg_check_modules(PC_DVD ${_dvdlibs} QUIET)
-    endif()
+#    endif()
 
     find_path(LIBDVD_INCLUDE_DIRS dvdnav/dvdnav.h PATHS ${PC_DVD_INCLUDE_DIRS})
     find_library(DVDREAD_LIBRARY NAMES dvdread libdvdread PATHS ${PC_DVD_dvdread_LIBDIR})
