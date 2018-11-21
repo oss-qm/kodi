@@ -455,6 +455,8 @@ CCPUInfo::CCPUInfo(void)
     m_cpuRevision = "N/A";
   if (m_cpuSerial.empty())
     m_cpuSerial = "N/A";
+  if (m_cpuModel.empty())
+    m_cpuModel = "N/A";
 
   readProcStat(m_userTicks, m_niceTicks, m_systemTicks, m_idleTicks, m_ioTicks);
   m_nextUsedReadTime.Set(MINIMUM_TIME_BETWEEN_READS);
