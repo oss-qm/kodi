@@ -104,17 +104,13 @@ bool CDVDInputStreamNavigator::Open()
     return false;
   }
 
-  int region = CSettings::GetInstance().GetInt(CSettings::SETTING_DVDS_PLAYERREGION);
+  int32_t region = CSettings::GetInstance().GetInt(CSettings::SETTING_DVDS_PLAYERREGION);
   int mask = 0;
   if(region > 0)
     mask = 1 << (region-1);
   else
-  {
-    // find out what region dvd reports itself to be from, and use that as mask if available
-    vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-    if (vm && vm->vmgi && vm->vmgi->vmgi_mat)
-      mask = ((vm->vmgi->vmgi_mat->vmg_category >> 16) & 0xff) ^ 0xff;
-  }
+    dvdnav_read_region_mask(&m_dvdnav, &mask);
+
   if(!mask)
     mask = 0xff;
 
