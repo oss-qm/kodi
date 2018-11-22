@@ -990,6 +990,21 @@ if test "$use_mysql" = "yes"; then
 fi
 AC_CHECK_HEADER([ass/ass.h],, AC_MSG_ERROR($missing_library))
 
+## fixme: only when optical is enabled
+PKG_CHECK_MODULES([LIBDVDREAD], [dvdread],, AC_MSG_ERROR([libdvdread not found]))
+XB_FIND_SONAME([DVDREAD], [dvdread])
+echo "+++=== DVDREAD soname: $DVDREAD_SONAME"
+echo "+++=== DVDREAD cflags: $DVDREAD_CFLAGS"
+#set | grep DVDREAD
+INCLUDES="$INCLUDES $DVDREAD_CFLAGS"
+
+PKG_CHECK_MODULES([LIBDVDNAV], [dvdnav],, AC_MSG_ERROR([libdvdnav not found]))
+XB_FIND_SONAME([DVDNAV], [dvdnav])
+echo "+++=== DVDNAV soname: $DVDNAV_SONAME"
+echo "+++=== DVDNAV cflags: $DVDNAV_CFLAGS"
+#set | grep DVDNAV
+INCLUDES="$INCLUDES $DVDNAV_CFLAGS"
+
 PKG_CHECK_MODULES([LIBCURL], [libcurl],, AC_MSG_ERROR([libcurl not found]))
 XB_FIND_SONAME([CURL], [curl])
 AC_MSG_CHECKING([for CRYPTO_set_locking_callback(0) in $CURL_SONAME])
