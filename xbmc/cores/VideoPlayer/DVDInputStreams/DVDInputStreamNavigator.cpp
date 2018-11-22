@@ -1304,7 +1304,7 @@ bool CDVDInputStreamNavigator::GetState(std::string &xmlstate)
   if( !m_dvdnav )
     return false;
 
-  dvd_state_t save_state;
+  dvdnav_state_t save_state;
   if( DVDNAV_STATUS_ERR == m_dll.dvdnav_get_state(m_dvdnav, &save_state) )
   {
     CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::GetNavigatorState - Failed to get state (%s)", m_dll.dvdnav_err_to_string(m_dvdnav));
@@ -1325,7 +1325,7 @@ bool CDVDInputStreamNavigator::SetState(const std::string &xmlstate)
   if( !m_dvdnav )
     return false;
 
-  dvd_state_t save_state;
+  dvdnav_state_t save_state;
   memset( &save_state, 0, sizeof( save_state ) );
 
   if( !CDVDStateSerializer::XMLToDVDState(&save_state, xmlstate)  )
