@@ -84,6 +84,12 @@ public:
   virtual dvdnav_status_t dvdnav_get_highlight_area(pci_t *nav_pci , int32_t button, int32_t mode, dvdnav_highlight_area_t *highlight)=0;
   virtual dvdnav_status_t dvdnav_go_up(dvdnav_t *self)=0;
   virtual int8_t dvdnav_get_active_audio_stream(dvdnav_t *self)=0;
+  virtual int8_t dvdnav_set_active_audio_stream(dvdnav_t *self, int8_t stream)=0;
+  virtual int8_t dvdnav_set_active_spu_stream(dvdnav_t *self, int8_t stream)=0;
+  virtual int8_t dvdnav_get_spu_stream_count(dvdnav_t *self)=0;
+  virtual dvdnav_status_t dvdnav_enable_spu_stream(dvdnav_t *self, int enable)=0;
+  virtual int dvdnav_is_spu_stream_enabled(dvdnav_t *self)=0;
+  virtual int8_t dvdnav_get_audio_stream_count(dvdnav_t *self)=0;
   virtual uint16_t dvdnav_audio_stream_to_lang(dvdnav_t *self, uint8_t stream)=0;
   virtual vm_t* dvdnav_get_vm(dvdnav_t *self)=0;
   virtual int dvdnav_get_button_info(dvdnav_t* self, int alpha[2][4], int color[2][4])=0;
@@ -192,6 +198,18 @@ public:
         { return ::dvdnav_go_up(self); }
     virtual int8_t dvdnav_get_active_audio_stream(dvdnav_t *self)
         { return ::dvdnav_get_active_audio_stream(self); }
+    virtual int8_t dvdnav_set_active_audio_stream(dvdnav_t *self, int8_t stream)
+        { return ::dvdnav_set_active_audio_stream(self, stream); }
+    virtual int8_t dvdnav_set_active_spu_stream(dvdnav_t *self, int8_t stream)
+        { return ::dvdnav_set_active_spu_stream(self, stream); }
+    virtual int8_t dvdnav_get_spu_stream_count(dvdnav_t *self)
+        { return ::dvdnav_get_spu_stream_count(self); }
+    virtual dvdnav_status_t dvdnav_enable_spu_stream(dvdnav_t *self, int enable)
+        { return ::dvdnav_enable_spu_stream(self, enable); }
+    virtual int dvdnav_is_spu_stream_enabled(dvdnav_t *self)
+        { return ::dvdnav_is_spu_stream_enabled(self); }
+    virtual int8_t dvdnav_get_audio_stream_count(dvdnav_t *self)
+        { return ::dvdnav_get_audio_stream_count(self); }
     virtual uint16_t dvdnav_audio_stream_to_lang(dvdnav_t *self, uint8_t stream)
         { return ::dvdnav_audio_stream_to_lang(self, stream); }
     virtual vm_t* dvdnav_get_vm(dvdnav_t *self)
@@ -289,6 +307,12 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
   DEFINE_METHOD4(dvdnav_status_t, dvdnav_get_highlight_area, (pci_t *p1, int32_t p2, int32_t p3, dvdnav_highlight_area_t *p4))
   DEFINE_METHOD1(dvdnav_status_t, dvdnav_go_up, (dvdnav_t *p1))
   DEFINE_METHOD1(int8_t, dvdnav_get_active_audio_stream, (dvdnav_t *p1))
+  DEFINE_METHOD2(int8_t, dvdnav_set_active_audio_stream, (dvdnav_t *p1, int8_t p2))
+  DEFINE_METHOD2(int8_t, dvdnav_set_active_spu_stream, (dvdnav_t *p1, int8_t p2))
+  DEFINE_METHOD1(int8_t, dvdnav_get_spu_stream_count, (dvdnav_t *p1))
+  DEFINE_METHOD2(int8_t, dvdnav_enable_spu_stream, (dvdnav_t *p1, int p2))
+  DEFINE_METHOD1(int8_t, dvdnav_is_spu_stream_enabled, (dvdnav_t *p1))
+  DEFINE_METHOD1(int8_t, dvdnav_get_audio_stream_count, (dvdnav_t *p1))
   DEFINE_METHOD2(uint16_t, dvdnav_audio_stream_to_lang, (dvdnav_t *p1, uint8_t p2))
   DEFINE_METHOD1(vm_t*, dvdnav_get_vm, (dvdnav_t *p1))
   DEFINE_METHOD3(int, dvdnav_get_button_info, (dvdnav_t* p1, int p2[2][4], int p3[2][4]))
@@ -354,6 +378,12 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
     RESOLVE_METHOD(dvdnav_get_highlight_area)
     RESOLVE_METHOD(dvdnav_go_up)
     RESOLVE_METHOD(dvdnav_get_active_audio_stream)
+    RESOLVE_METHOD(dvdnav_set_active_audio_stream)
+    RESOLVE_METHOD(dvdnav_set_active_spu_stream)
+    RESOLVE_METHOD(dvdnav_get_spu_stream_count)
+    RESOLVE_METHOD(dvdnav_enable_spu_stream)
+    RESOLVE_METHOD(dvdnav_is_spu_stream_enabled)
+    RESOLVE_METHOD(dvdnav_get_audio_stream_count)
     RESOLVE_METHOD(dvdnav_audio_stream_to_lang)
     RESOLVE_METHOD(dvdnav_get_vm)
     RESOLVE_METHOD(dvdnav_get_button_info)
