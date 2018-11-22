@@ -30,22 +30,22 @@
 #include "DVDStateSerializer.h"
 #include <sstream>
 
-bool CDVDStateSerializer::test( const dvd_state_t *state  )
+bool CDVDStateSerializer::test( const dvdnav_state_t *state  )
 {
-  dvd_state_t state2;
+  dvdnav_state_t state2;
   std::string buffer;
 
-  memset( &state2, 0, sizeof(dvd_state_t));
+  memset( &state2, 0, sizeof(dvdnav_state_t));
 
   DVDToXMLState(buffer, state);
 
   XMLToDVDState( &state2, buffer);
 
-  return memcmp( &state2, state, sizeof( dvd_state_t )) == 0;
+  return memcmp( &state2, state, sizeof( dvdnav_state_t )) == 0;
 
 }
 
-bool CDVDStateSerializer::DVDToXMLState( std::string &xmlstate, const dvd_state_t *state )
+bool CDVDStateSerializer::DVDToXMLState( std::string &xmlstate, const dvdnav_state_t *state )
 {
   char buffer[256];
   CXBMCTinyXML xmlDoc("navstate");
@@ -208,7 +208,7 @@ bool CDVDStateSerializer::DVDToXMLState( std::string &xmlstate, const dvd_state_
   return true;
 }
 
-bool CDVDStateSerializer::XMLToDVDState( dvd_state_t *state, const std::string &xmlstate )
+bool CDVDStateSerializer::XMLToDVDState( dvdnav_state_t *state, const std::string &xmlstate )
 {
   CXBMCTinyXML xmlDoc;
 
