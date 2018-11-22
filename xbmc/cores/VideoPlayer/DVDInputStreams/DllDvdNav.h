@@ -36,8 +36,7 @@ extern "C" {
 
  // pull in Kodi's config h instead of dvdnav's one
  #include "xbmc/config.h"
- #include "dvdnav/dvdnav_internal.h"
- #include "dvdnav/vm.h"
+// #include "dvdnav/vm.h"
  #include "dvdnav/dvd_types.h"
 
  #ifdef WIN32 // WIN32INCLUDES
