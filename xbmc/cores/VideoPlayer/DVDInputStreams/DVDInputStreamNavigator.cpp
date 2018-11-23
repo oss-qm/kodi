@@ -1150,17 +1150,8 @@ float CDVDInputStreamNavigator::GetVideoAspectRatio()
 
 void CDVDInputStreamNavigator::EnableSubtitleStream(bool bEnable)
 {
-  if (!m_dvdnav)
-    return;
-
-  vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-  if (!vm)
-    return;
-
-  if(bEnable)
-    vm->state.SPST_REG |= 0x40;
-  else
-    vm->state.SPST_REG &= ~0x40;
+  if (m_dvdnav != NULL)
+    m_dll.dvdnav_enable_spu_stream(m_dvdnav, bEnable ? 1 : 0);
 }
 
 bool CDVDInputStreamNavigator::IsSubtitleStreamEnabled()
