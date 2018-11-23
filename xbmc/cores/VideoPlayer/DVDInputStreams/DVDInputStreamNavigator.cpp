@@ -614,28 +614,8 @@ bool CDVDInputStreamNavigator::SetActiveSubtitleStream(int iId)
   int streamId = ConvertSubtitleStreamId_XBMCToExternal(iId);
   CLog::Log(LOGDEBUG, "%s - id: %d, stream: %d", __FUNCTION__, iId, streamId);
 
-  if (!m_dvdnav)
-    return false;
-
-  vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-  if (!vm)
-    return false;
-  if (!vm->state.pgc)
-    return false;
-
-  /* make sure stream is valid, if not don't allow it */
-  if (streamId < 0 || streamId >= 32)
-    return false;
-  else if ( !(vm->state.pgc->subp_control[streamId] & (1<<31)) )
-    return false;
-
-  if (vm->state.domain != VTS_DOMAIN && streamId != 0)
-    return false;
-
-  /* set subtitle stream without modifying visibility */
-  vm->state.SPST_REG = streamId | (vm->state.SPST_REG & 0x40);
-
-  return true;
+  return ((m_dvdnav != NULL) &&
+          (m_dvdnav->dvdnav_set_active_spu_stream(m_dvdnav, streamId) == DVDNAV_STATUS_OK));
 }
 
 void CDVDInputStreamNavigator::ActivateButton()
