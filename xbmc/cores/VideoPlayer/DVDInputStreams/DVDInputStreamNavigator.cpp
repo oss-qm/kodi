@@ -872,31 +872,10 @@ int CDVDInputStreamNavigator::GetSubTitleStreamCount()
 
 int CDVDInputStreamNavigator::GetActiveAudioStream()
 {
-  int activeStream = -1;
+  if (m_dvdnav == NULL)
+    return -1;
 
-  if (m_dvdnav)
-  {
-    vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-    if (vm && vm->state.pgc)
-    {
-      // get the current selected audiostream, for non VTS_DOMAIN it is always stream 0
-      int audioN = 0;
-      if (vm->state.domain == VTS_DOMAIN)
-      {
-        audioN = vm->state.AST_REG;
-
-        /* make sure stream is valid, if not don't allow it */
-        if (audioN < 0 || audioN >= 8)
-          audioN = -1;
-        else if ( !(vm->state.pgc->audio_control[audioN] & (1<<15)) )
-          audioN = -1;
-      }
-
-      activeStream = m_dll.dvdnav_audio_stream_idx_to_seq(audioN);
-    }
-  }
-
-  return activeStream;
+  return m_dll.dvdnav_audio_stream_idx_to_seq(m_dll.dvdnav_get_active_audio_stream(m_dvdnav));
 }
 
 void CDVDInputStreamNavigator::SetAudioStreamName(DVDNavStreamInfo &info, const audio_attr_t &audio_attributes)
