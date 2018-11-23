@@ -797,31 +797,14 @@ CDVDInputStream::ENextStream CDVDInputStreamNavigator::NextStream()
 
 int CDVDInputStreamNavigator::GetActiveSubtitleStream()
 {
-  int activeStream = 0;
+  if (m_dvdnav == NULL)
+    return 0;
 
-  if (m_dvdnav)
-  {
-    vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-    if (vm && vm->state.pgc)
-    {
-      // get the current selected audiostream, for non VTS_DOMAIN it is always stream 0
-      int subpN = 0;
-      if (vm->state.domain == VTS_DOMAIN)
-      {
-        subpN = vm->state.SPST_REG & ~0x40;
+  int id = m_dll.dvdnav_get_active_spu_stream(m_dvdnav);
+  if (id < 0)
+    return 0;
 
-        /* make sure stream is valid, if not don't allow it */
-        if (subpN < 0 || subpN >= 32)
-          subpN = -1;
-        else if ( !(vm->state.pgc->subp_control[subpN] & (1<<31)) )
-          subpN = -1;
-      }
-
-      activeStream = m_dvdnav.dvdnav_spu_stream_idx_to_seq(subpN);
-    }
-  }
-
-  return activeStream;
+  return m_dvdnav.dvdnav_spu_stream_idx_to_seq(id);
 }
 
 DVDNavSubtitleStreamInfo CDVDInputStreamNavigator::GetSubtitleStreamInfo(const int iId)
