@@ -867,28 +867,7 @@ void CDVDInputStreamNavigator::SetSubtitleStreamName(DVDNavStreamInfo &info, con
 
 int CDVDInputStreamNavigator::GetSubTitleStreamCount()
 {
-  if (!m_dvdnav) return 0;
-
-  vm_t* vm = m_dll.dvdnav_get_vm(m_dvdnav);
-
-  if (!vm) return 0;
-  if (!vm->state.pgc) return 0;
-
-  if (vm->state.domain == VTS_DOMAIN)
-  {
-    int streamN = 0;
-    for (int i = 0; i < 32; i++)
-    {
-      if (vm->state.pgc->subp_control[i] & (1<<31))
-        streamN++;
-    }
-    return streamN;
-  }
-  else
-  {
-    /* just for good measure say that non vts domain always has one */
-    return 1;
-  }
+  return (m_dvdnav == NULL ? 0 : m_dll.dvdnav_get_spu_stream_count(m_dvdnav));
 }
 
 int CDVDInputStreamNavigator::GetActiveAudioStream()
