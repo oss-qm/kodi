@@ -605,8 +605,7 @@ bool CDVDInputStreamNavigator::SetActiveAudioStream(int iId)
   int streamId = m_dll.dvdnav_audio_stream_seq_to_idx(m_dvdnav, iId);
   CLog::Log(LOGDEBUG, "%s - id: %d, stream: %d", __FUNCTION__, iId, streamId);
 
-  return ((m_dvdnav != NULL) &&
-          (m_dvdnav->dvdnav_set_active_audio_stream(m_dvdnav, streamId) == DVDNAV_STATUS_OK));
+  return (m_dvdnav->dvdnav_set_active_audio_stream(m_dvdnav, streamId) == DVDNAV_STATUS_OK);
 }
 
 bool CDVDInputStreamNavigator::SetActiveSubtitleStream(int iId)
@@ -872,10 +871,7 @@ int CDVDInputStreamNavigator::GetSubTitleStreamCount()
 
 int CDVDInputStreamNavigator::GetActiveAudioStream()
 {
-  if (m_dvdnav == NULL)
-    return -1;
-
-  return m_dll.dvdnav_audio_stream_idx_to_seq(m_dll.dvdnav_get_active_audio_stream(m_dvdnav));
+  return (m_dvdnav == NULL ? -1 : m_dll.dvdnav_audio_stream_idx_to_seq(m_dvdnav, m_dll.dvdnav_get_active_audio_stream(m_dvdnav)));
 }
 
 void CDVDInputStreamNavigator::SetAudioStreamName(DVDNavStreamInfo &info, const audio_attr_t &audio_attributes)
