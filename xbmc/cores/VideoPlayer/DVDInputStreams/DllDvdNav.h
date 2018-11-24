@@ -92,7 +92,6 @@ public:
   virtual int dvdnav_is_spu_stream_enabled(dvdnav_t *self)=0;
   virtual int8_t dvdnav_get_audio_stream_count(dvdnav_t *self)=0;
   virtual uint16_t dvdnav_audio_stream_to_lang(dvdnav_t *self, uint8_t stream)=0;
-  virtual dvdnav_vm_t* dvdnav_get_vm(dvdnav_t *self)=0;
   virtual int dvdnav_get_button_info(dvdnav_t* self, int alpha[2][4], int color[2][4])=0;
   virtual int8_t dvdnav_get_audio_logical_stream(dvdnav_t *self, uint8_t audio_num)=0;
   virtual dvdnav_status_t dvdnav_set_region_mask(dvdnav_t *self, int32_t region_mask)=0;
@@ -213,8 +212,6 @@ public:
         { return ::dvdnav_get_audio_stream_count(self); }
     virtual uint16_t dvdnav_audio_stream_to_lang(dvdnav_t *self, uint8_t stream)
         { return ::dvdnav_audio_stream_to_lang(self, stream); }
-    virtual dvdnav_vm_t* dvdnav_get_vm(dvdnav_t *self)
-        { return ::dvdnav_get_vm(self); }
     virtual int dvdnav_get_button_info(dvdnav_t* self, int alpha[2][4], int color[2][4])
         { return ::dvdnav_get_button_info(self, alpha, color); }
     virtual int8_t dvdnav_get_audio_logical_stream(dvdnav_t *self, uint8_t audio_num)
@@ -315,7 +312,6 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
   DEFINE_METHOD1(int8_t, dvdnav_is_spu_stream_enabled, (dvdnav_t *p1))
   DEFINE_METHOD1(int8_t, dvdnav_get_audio_stream_count, (dvdnav_t *p1))
   DEFINE_METHOD2(uint16_t, dvdnav_audio_stream_to_lang, (dvdnav_t *p1, uint8_t p2))
-  DEFINE_METHOD1(dvdnav_vm_t*, dvdnav_get_vm, (dvdnav_t *p1))
   DEFINE_METHOD3(int, dvdnav_get_button_info, (dvdnav_t* p1, int p2[2][4], int p3[2][4]))
   DEFINE_METHOD2(int8_t, dvdnav_get_audio_logical_stream, (dvdnav_t *p1, uint8_t p2))
   DEFINE_METHOD2(dvdnav_status_t, dvdnav_set_region_mask, (dvdnav_t *p1, int32_t p2))
@@ -386,7 +382,6 @@ class DllDvdNav : public DllDynamic, DllDvdNavInterface
     RESOLVE_METHOD(dvdnav_is_spu_stream_enabled)
     RESOLVE_METHOD(dvdnav_get_audio_stream_count)
     RESOLVE_METHOD(dvdnav_audio_stream_to_lang)
-    RESOLVE_METHOD(dvdnav_get_vm)
     RESOLVE_METHOD(dvdnav_get_button_info)
     RESOLVE_METHOD(dvdnav_get_audio_logical_stream)
     RESOLVE_METHOD(dvdnav_set_region_mask)
