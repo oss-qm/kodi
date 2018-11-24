@@ -12,7 +12,6 @@ SRCS=	DVDFactoryInputStream.cpp \
 	DVDInputStreamStack.cpp \
 	InputStreamAddon.cpp \
 	InputStreamMultiSource.cpp\
-	DVDStateSerializer.cpp \
 
 LIB=	DVDInputStreams.a
 
