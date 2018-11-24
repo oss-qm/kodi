@@ -187,12 +187,6 @@ protected:
 
   int ProcessBlock(uint8_t* buffer, int* read);
 
-  /**
-   * XBMC     : the subtitle stream id we use in xbmc
-   * external : the subtitle stream id that is used in libdvdnav
-   */
-  int ConvertSubtitleStreamId_XBMCToExternal(int id);
-
   static void SetAudioStreamName(DVDNavStreamInfo &info, const audio_attr_t &audio_attributes);
   static void SetSubtitleStreamName(DVDNavStreamInfo &info, const subp_attr_t &subp_attributes);
 

@@ -609,11 +609,12 @@ bool CDVDInputStreamNavigator::SetActiveAudioStream(int iId)
 
 bool CDVDInputStreamNavigator::SetActiveSubtitleStream(int iId)
 {
-  int streamId = ConvertSubtitleStreamId_XBMCToExternal(iId);
+  if (m_dvdnav == NULL) return false;
+
+  int streamId = dvdnav_audio_stream_seq_to_idx(iId);
   CLog::Log(LOGDEBUG, "%s - id: %d, stream: %d", __FUNCTION__, iId, streamId);
 
-  return ((m_dvdnav != NULL) &&
-          (m_dvdnav->dvdnav_set_active_spu_stream(m_dvdnav, streamId) == DVDNAV_STATUS_OK));
+  return (m_dvdnav->dvdnav_set_active_spu_stream(m_dvdnav, streamId) == DVDNAV_STATUS_OK);
 }
 
 void CDVDInputStreamNavigator::ActivateButton()
@@ -811,7 +812,7 @@ DVDNavSubtitleStreamInfo CDVDInputStreamNavigator::GetSubtitleStreamInfo(const i
   if (!m_dvdnav)
     return info;
 
-  int streamId = ConvertSubtitleStreamId_XBMCToExternal(iId);
+  int streamId = dvdnav_audio_stream_seq_to_idx(iId);
   subp_attr_t subp_attributes;
 
   if( m_dll.dvdnav_get_spu_attr(m_dvdnav, streamId, &subp_attributes) == DVDNAV_STATUS_OK )
@@ -1162,11 +1163,6 @@ bool CDVDInputStreamNavigator::SetState(const std::string &xmlstate)
 {
   CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetState - not implemented");
   return false;
-}
-
-int CDVDInputStreamNavigator::ConvertSubtitleStreamId_XBMCToExternal(int id)
-{
-  return (m_dvdnav == NULL ? -1 : dvdnav_audio_stream_seq_to_idx(id));
 }
 
 std::string CDVDInputStreamNavigator::GetDVDTitleString()
