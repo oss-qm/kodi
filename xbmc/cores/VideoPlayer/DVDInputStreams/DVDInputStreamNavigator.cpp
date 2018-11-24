@@ -21,7 +21,6 @@
 #include "DVDInputStreamNavigator.h"
 #include "utils/LangCodeExpander.h"
 #include "../DVDDemuxSPU.h"
-#include "DVDStateSerializer.h"
 #include "settings/Settings.h"
 #include "LangInfo.h"
 #include "utils/log.h"
@@ -1155,54 +1154,14 @@ bool CDVDInputStreamNavigator::IsSubtitleStreamEnabled()
 
 bool CDVDInputStreamNavigator::GetState(std::string &xmlstate)
 {
-  if( !m_dvdnav )
-    return false;
-
-  dvdnav_state_t save_state;
-  if( DVDNAV_STATUS_ERR == m_dll.dvdnav_get_state(m_dvdnav, &save_state) )
-  {
-    CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::GetNavigatorState - Failed to get state (%s)", m_dll.dvdnav_err_to_string(m_dvdnav));
-    return false;
-  }
-
-  if( !CDVDStateSerializer::DVDToXMLState(xmlstate, &save_state) )
-  {
-    CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetNavigatorState - Failed to serialize state");
-    return false;
-  }
-
-  return true;
+  CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::GetState - not implemented");
+  return false;
 }
 
 bool CDVDInputStreamNavigator::SetState(const std::string &xmlstate)
 {
-  if( !m_dvdnav )
-    return false;
-
-  dvdnav_state_t save_state;
-  memset( &save_state, 0, sizeof( save_state ) );
-
-  if( !CDVDStateSerializer::XMLToDVDState(&save_state, xmlstate)  )
-  {
-    CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetNavigatorState - Failed to deserialize state");
-    return false;
-  }
-
-  if( DVDNAV_STATUS_ERR == m_dll.dvdnav_set_state(m_dvdnav, &save_state) )
-  {
-    CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetNavigatorState - Failed to set state (%s), retrying after read", m_dll.dvdnav_err_to_string(m_dvdnav));
-
-    /* vm won't be started until after first read, this should really be handled internally */
-    uint8_t buffer[DVD_VIDEO_BLOCKSIZE];
-    Read(buffer,DVD_VIDEO_BLOCKSIZE);
-
-    if( DVDNAV_STATUS_ERR == m_dll.dvdnav_set_state(m_dvdnav, &save_state) )
-    {
-      CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetNavigatorState - Failed to set state (%s)", m_dll.dvdnav_err_to_string(m_dvdnav));
-      return false;
-    }
-  }
-  return true;
+  CLog::Log(LOGWARNING, "CDVDInputStreamNavigator::SetState - not implemented");
+  return false;
 }
 
 int CDVDInputStreamNavigator::ConvertSubtitleStreamId_XBMCToExternal(int id)
